@@ -6,6 +6,7 @@ Import des modules :
     socket = récupération des informations réseaux
     os = communiquer avec os
     bytes2human = convertie les informations en un format lisible
+    signal = permet la recuperation de sortie du programme
 """
 import datetime
 import sys
@@ -13,9 +14,10 @@ import psutil
 import socket
 import os
 from psutil._common import bytes2human
+import signal
 
 
-# Toutes les fonctions pour les demandes du client classé par type de demande :
+# Toutes les fonctions pour les demandes du client classées par type de demande :
 
 ###############################################################################
 ###############################################################################
@@ -95,7 +97,7 @@ def cpu(item):
             result = result + "\n" + d_info
             result = f"Statistic sur le CPU :\n{result}"
 
-            # Renvoie le résultat pour l'envoyer
+            # Renvoi le résultat pour l'envoyer
             return result
 
     except Exception as e:  # Montre l'erreur rencontrée par le script
@@ -168,7 +170,7 @@ def disk(item):
                 # Ajoute l'en-tête et les informations sur l'utilisation du disque dans une chaîne de caractères
                 d_info = titre + "\n" + d_info
             # Mise en forme de la réponse à envoyer à l'utilisateur en utilisant la f-string
-            result = f"Information sur l'utilisation du disk(s) :\n {d_info}"
+            result = f"Information sur l'utilisation du disk(s) :\n{d_info}"
             return result  # Renvoie le résultat pour l'envoyer
 
         elif item == 2:
@@ -206,7 +208,7 @@ def disk(item):
                 dd_info = dd_info + "\n" + d_info
 
             # Mise en forme de la réponse à envoyer à l'utilisateur
-            result = f"Information sur les disk(s) :\n{dd_info}"
+            result = f"Informations sur les disk(s) :\n{dd_info}"
 
             # Renvoie le résultat pour l'envoyer
             return result
@@ -228,7 +230,7 @@ def memoire(item):
             mem_utiliser = psutil.virtual_memory().total - psutil.virtual_memory().available
 
             # On formate la valeur de l'espace de mémoire vive utilisé en chaîne de caractères
-            result = ("Mémoire ram utiliser : {}".format(int(mem_utiliser / 1024 / 1024)))
+            result = ("Mémoire ram utilisée : {}".format(int(mem_utiliser / 1024 / 1024)))
             return result  # Renvoie le résultat pour l'envoyer
 
         elif item == 1:
@@ -236,7 +238,7 @@ def memoire(item):
             mem_total = psutil.virtual_memory().total
             # On formate la valeur de l'espace total de mémoire vive en chaîne de caractères
             # en divisant la valeur par 1024 puis par 1024 pour la convertir en Mo
-            result = ("Mémoire ram total : {}".format(int(mem_total / 1024 / 1024)))
+            result = ("Mémoire ram totale : {}".format(int(mem_total / 1024 / 1024)))
             # On renvoie le résultat sous forme de chaîne de caractères
             return result  # Renvoie le résultat pour l'envoyer
 
@@ -245,7 +247,7 @@ def memoire(item):
             mem_utilisation_pourcen = psutil.virtual_memory().percent
             # On formate la valeur de l'utilisation de la mémoire vive en chaîne de caractères
             # en utilisant la fonction "format" pour inclure la valeur dans la chaîne de caractères
-            result = ("Mémoire ram utiliser en % : {}".format(int(mem_utilisation_pourcen)))
+            result = ("Mémoire ram utilisée en % : {}".format(int(mem_utilisation_pourcen)))
             # Mise en Forme de la réponse à envoyer à l'utilisateur
             # On renvoie le résultat sous forme de chaîne de caractères
             return result  # Renvoie le résultat pour l'envoyer
@@ -330,7 +332,7 @@ def networks(item):
                 # On concatène la chaîne de caractères formée avec le résultat final
                 result = result + "\n" + d_info
             # Mise en Forme de la réponse à envoyer à l'utilisateur
-            result = f"Utilisation des cartes reseaux :\n{result}"
+            result = f"Statistiques des cartes reseaux :\n{result}"
             return result  # Renvoie le résultat pour l'envoyer
 
         elif item == 1:
@@ -398,7 +400,7 @@ def networks(item):
                     # Ajoute cette chaîne de caractères au résultat final
                     result = result + "\n" + d_info
             # Mise en Forme de la réponse à envoyer à l'utilisateur
-            result = f"Utilisation des cartes reseaux :\n{result}"
+            result = f"Parametres des cartes reseaux :\n{result}"
             # Renvoie le résultat pour l'envoyer
             return result
 
@@ -438,7 +440,7 @@ def networks(item):
                 # Ajoute cette chaîne de caractères au résultat final
                 result = result + "\n" + d_info
             # Mise en Forme de la réponse à envoyer à l'utilisateur
-            result = f"Utilisation des cartes reseaux :\n{result}"
+            result = f"Informations des cartes reseaux :\n{result}"
             # Renvoie le résultat pour l'envoyer
             return result
 
@@ -473,7 +475,7 @@ def netstat():
 
     # La variable "fmt" contient une chaîne de formatage qui sera utilisée
     # pour afficher les informations des connexions réseau de manière formatée
-    fmt = "| {:>20s}| {:>23s}| {:>11s}| {:>8s}| {:>4s}|"
+    fmt = "| {:>23s}| {:>23s}| {:>11s}| {:>8s}| {:>4s}|"
     # "titre" contient les titres des colonnes qui seront affichées pour chaque connexion réseau
     titre = fmt.format('LOCAL', 'DISTANCE', 'STATUS', 'PROCESS', 'HOST')
 
@@ -560,14 +562,14 @@ def capteur(item):
             # en utilisant la méthode sensors_fans de la bibliothèque psutil
             capteur_ventilo = psutil.sensors_fans()
             # Mise en forme de la réponse à envoyer à l'utilisateur en utilisant la f-string
-            result = f"Information sur les ventilateurs:\n {capteur_ventilo}"
+            result = f"Informations sur les ventilateurs:\n {capteur_ventilo}"
             return result  # Renvoie le résultat pour l'envoyer
         elif item == 2:
             # Récupère les informations sur la batterie
             # en utilisant la méthode sensors_battery de la bibliothèque psutil
             capteur_batterie = psutil.sensors_battery()
             # Mise en forme de la réponse à envoyer à l'utilisateur en utilisant la f-string
-            result = f"Information sur la batterie:\n {capteur_batterie}"
+            result = f"Informations sur la batterie:\n {capteur_batterie}"
             return result  # Renvoie le résultat pour l'envoyer
 
     except Exception as e:  # Si une erreur est rencontrée pendant l'exécution du code
@@ -601,7 +603,7 @@ def sys_info(item):
                 )
                 result = result + "\n" + d_info  # Ajoute les informations de l'utilisateur au tableau final
             # Mise en forme de la réponse à envoyer à l'utilisateur en utilisant la f-string
-            result = f"Information sur l'utilisation du disk(s) :\n{result}"
+            result = f"Informations sur l'utilisation du disk(s) :\n{result}"
             return result  # Renvoie le résultat pour l'envoyer
 
         elif item == 1:
@@ -631,8 +633,27 @@ def envoi(result):
 
 ###############################################################################
 ###############################################################################
-# Partie serveur récup de la demande du client :
+# Fonction suppression Tube fin de programme :
 
+
+def Exit_gracefully(signal, frame):
+    # Supprime les tubes nommés utilisés pour la communication entre le client et le serveur
+    os.remove("/tmp/tube_client_to_serveur")
+    os.remove("/tmp/tube_serveur_to_client")
+
+    # Quitte le programme
+    sys.exit(0)
+
+
+###############################################################################
+###############################################################################
+# Fonction main :
+
+#Appel de la fonction "Exit_gracefully" quand le signal "SIGINT" arrive. 
+#Le signal SIGINT est envoyé au processus lorsqu'on appuie sur Ctrl + C dans le terminal.
+signal.signal(signal.SIGINT, Exit_gracefully)
+
+# Partie serveur récup de la demande du client
 # Vérifie si le tube nommé "/tmp/tube_client_to_serveur" existe et le supprime s'il existe
 if os.path.exists("/tmp/tube_client_to_serveur"):
     os.remove("/tmp/tube_client_to_serveur")
@@ -674,7 +695,7 @@ while Saisie != "x":
         client = 1          # Client prend 1 pour la confirmation qu'un client est connecté
     except Exception as e:  # Exception pour afficher quand le client se déconnecter
         client = 0          # Client prend 0 pour indiquer qu'aucun client n'est connecté
-        """print("Le client vien de quitter la session")
+        """print("Le client vient de quitter la session")
         exit()   # Quitte le script"""
 
     if client == 1:
@@ -692,27 +713,27 @@ while Saisie != "x":
                 # cpu
                 result = cpu(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 1:  # Choix du Sous_Menu
+            elif Sous_Menu == 1:  # Choix du Sous_Menu
                 # mem
                 result = disk(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 2:  # Choix du Sous_Menu
+            elif Sous_Menu == 2:  # Choix du Sous_Menu
                 # disk
                 result = memoire(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 3:  # Choix du Sous_Menu
+            elif Sous_Menu == 3:  # Choix du Sous_Menu
                 # netw
                 result = networks(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 4:  # Choix du Sous_Menu
+            elif Sous_Menu == 4:  # Choix du Sous_Menu
                 # pros
                 result = process(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 5:  # Choix du Sous_Menu
+            elif Sous_Menu == 5:  # Choix du Sous_Menu
                 # capteur
                 result = capteur(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
-            if Sous_Menu == 6:  # Choix du Sous_Menu
+            elif Sous_Menu == 6:  # Choix du Sous_Menu
                 #  sysinfo
                 result = sys_info(demande)  # Renvoie la demande à effectuer au menu choisie
                 envoi(result)  # Renvoie le résultat à la fonction envoi
