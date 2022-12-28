@@ -3,7 +3,7 @@
 
 Rendu Projet le 28/12/2022
 
-![alt tag](https://github.com/Morzomb/Rendu_prog_linux/blob/main/main.png)
+![alt tag](https://github.com/Morzomb/Rendu_prog_linux/blob/main/Menu_Principale.png)
 
 Installation
 ------------
