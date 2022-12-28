@@ -13,7 +13,11 @@ Pour Faire Fonctionner la solution il faut installer les modules :
  - psutil pour le serveur 
  - console-menu pour client
 
+Commande pour installer le module psutil :
 
   $ pip install psutil
+
+Commande pour installer le module psutil :
+
   $ pip install console-menu
 
