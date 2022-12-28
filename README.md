@@ -15,9 +15,9 @@ Pour Faire Fonctionner la solution il faut installer les modules :
 
 Commande pour installer le module psutil :
 
-  `* $ pip install psutil`
+    `*$ pip install psutil`
 
 Commande pour installer le module psutil :
 
-  `* $ pip install console-menu`
+    `*$ pip install console-menu`
 
