@@ -8,7 +8,7 @@ Rendu Projet le 28/12/2022
 Installation
 ------------
 
-Pour Faire Fonctionner la solution il faut installer les modules :
+Pour faire fonctionner la solution il faut installer les modules :
 
  - psutil pour le serveur 
  - console-menu pour client
