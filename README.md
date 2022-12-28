@@ -21,3 +21,4 @@ Commande pour installer le module psutil :
 
     pip install console-menu
 
+!!! Le Serveur doit être lancer en premier car il est à l'incitatif du Tube pour la communication avec le client.
