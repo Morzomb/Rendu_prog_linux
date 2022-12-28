@@ -1,7 +1,7 @@
 """
 Import des modules :
     os = communiquer avec os
-    consolemenu = créée des menus et sous-menu
+    consolemenu = creer des menus et sous-menu
 """
 import os
 from consolemenu import *
@@ -15,7 +15,7 @@ from consolemenu.menu_component import Dimension
 # Variable qui va principalement nous servir pour communiquer la demande du client au serveur
 client_move = [None]
 
-# client_move Contiendront toujours 2 valeurs, en premier le premier sous-menu choisi par le client et enfin la demande choisie par le client
+# client_move contiendra toujours 2 valeurs. Le premier sous-menu choisi par le client et enfin la demande choisie par le client
 # Exemple client_move = [6, 2] le client est dans le menu info system et veut afficher l'heure de démarrage
 
 # Variable pour les menus et sous-menu
@@ -31,7 +31,7 @@ liste_main = ["CPU",
               "Réseau",
               "Manageur de process",
               "Capteur (température,etc..)",
-              "Information systèmes"
+              "Informations systèmes"
               ]
 
 # sous-menu CPU
@@ -39,21 +39,21 @@ liste_menu0 = ["Utilisation du CPU",
                "Fréquence du CPU ",
                "Nombre de CPU", 
                "CPU time",
-               "Statistic sur le(s) CPU",
+               "Statistiques sur le(s) CPU",
                prec
                ]
 
 # sous-menu DISK
-liste_menu1 = ["Information sur les partitions",
-               "Information sur l'utilisation du disk(s) ",
-               "Information sur les disk(s)",
+liste_menu1 = ["Informations sur les partitions",
+               "Informations sur l'utilisation du disk(s) ",
+               "Informations sur les disk(s)",
                prec
                ]
 
 # sous-menu MEMOIRE
-liste_menu2 = ["Mémoire ram Utiliser",
-               "Mémoire ram Total ",
-               "Mémoire ram Utiliser en % ",
+liste_menu2 = ["Mémoire ram Utilisée",
+               "Mémoire ram Totale ",
+               "Mémoire ram Utilisée en % ",
                "Récap complet avec le swap en plus",
                prec
                ]
@@ -80,19 +80,26 @@ liste_menu5 = ["Température",
                ]
 
 # sous-menu INFO SYS
-liste_menu6 = ["Information des Utilisateurs",
-               "Heure d'allumage ",
+liste_menu6 = ["Informations des Utilisateurs",
+               "Heure d'allumage",
                prec
                ]
 
 # Tubes
-fd_w = os.open("/tmp/tube_client_to_serveur",
-               os.O_WRONLY
-               )
-
-fd_r = os.open("/tmp/tube_serveur_to_client",
-               os.O_RDONLY
-               )
+#Vérifie si le tube nommé "/tmp/tube_client_to_serveur" existe et l'ouvre s'il existe
+if os.path.exists("/tmp/tube_client_to_serveur"):
+    fd_w = os.open("/tmp/tube_client_to_serveur", os.O_WRONLY)
+else:
+    print("Le Serveur n'est pas Allumer")
+    exit()
+    
+    
+#Vérifie si le tube nommé "/tmp/tube_serveur_to_client" existe et l'ouvre s'il existe
+if os.path.exists("/tmp/tube_serveur_to_client"):
+    fd_r = os.open("/tmp/tube_serveur_to_client", os.O_RDONLY)     
+else:
+    print("Le Serveur n'est pas Allumer")
+    exit()
 
 
 ###############################################################################
@@ -101,7 +108,7 @@ fd_r = os.open("/tmp/tube_serveur_to_client",
 
 
 def main():
-    global client_move, main_format     # Mise en global les movements dans les menus du client et du format pour les menus
+    global client_move, main_format     # Met les variables à l'état global dans les menus du client et du format pour les menus
     client_move = [0, 0]                # Retour à la case départ pour le client
     main_format = MenuFormatBuilder().set_prompt("Choix_Sélectionner_>")    # Format pour tous les menus
     # SelectionMenu (Listes des noms des choix, Le Titre afficher pour le menu, Le commentaire en dessous du titre,
@@ -115,24 +122,26 @@ def main():
     if select == 0:
         # CPU
         menu0()
-    if select == 1:
+    elif select == 1:
         # DISK
         menu1()
-    if select == 2:
+    elif select == 2:
         # MEMOIRE
         menu2()
-    if select == 3:
+    elif select == 3:
         # NETWORK
         menu3()
-    if select == 4:
+    elif select == 4:
         # PROCESS
         menu4()
-    if select == 5:
+    elif select == 5:
         # CAPTEUR
         menu5()
-    if select == 6:
+    elif select == 6:
         # INFO SYS
         menu6()
+    else:
+        exit()
 
 
 ###############################################################################
@@ -150,13 +159,13 @@ def menu0():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 5:                 # Retour en arrière
         main()
-    elif select == 6:               # Quitter le script client
+    elif select == 6:               # Quitte le script client
         exit()
     else:
-        demande()           # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()           # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu1():
@@ -170,13 +179,13 @@ def menu1():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 3:                 # Retour en arrière
         main()
-    elif select == 4:               # Quitter le script client
+    elif select == 4:               # Quitte le script client
         exit()
     else:
-        demande()          # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()          # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu2():
@@ -190,13 +199,13 @@ def menu2():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 4:                 # Retour en arrière
         main()
-    elif select == 5:               # Quitter le script client
+    elif select == 5:               # Quitte le script client
         exit()
     else:
-        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu3():
@@ -210,13 +219,13 @@ def menu3():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 5:                 # Retour en arrière
         main()
-    elif select == 6:               # Quitter le script client
+    elif select == 6:               # Quitte le script client
         exit()
     else:
-        demande()      # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()      # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu4():
@@ -230,13 +239,13 @@ def menu4():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 1:                 # Retour en arrière
         main()
-    elif select == 2:               # Quitter le script client
+    elif select == 2:               # Quitte le script client
         exit()
     else:
-        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu5():
@@ -250,13 +259,13 @@ def menu5():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 3:                 # Retour en arrière
         main()
-    elif select == 4:               # Quitter le script client
+    elif select == 4:               # Quitte le script client
         exit()
     else:
-        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()       # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 def menu6():
@@ -272,13 +281,13 @@ def menu6():
     menu.show()
     menu.join()
     select = menu.selected_option   # Récupère la valeur sélectionnée par le client
-    client_move.append(select)      # client_move ajout dans la liste le sous-menu sélectionner
+    client_move.append(select)      # client_move ajoute dans la liste le sous-menu sélectionné
     if select == 2:                 # Retour en arrière
         main()
-    if select == 3:                 # Quitter le script client
+    elif select == 3:                 # Quitte le script client
         exit()
     else:
-        demande()      # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoi la demande au serveur
+        demande()      # Si le choix n'est ni retour arrière ni quitter lance la fonction qui envoit la demande au serveur
 
 
 ###############################################################################
@@ -287,9 +296,17 @@ def menu6():
 
 
 def menu_result(result):
-    precedant = ["Page Précédente"]             # Variable pour la menu_result
-    thin = Dimension(width=145, height=40)      # Ajustement de la taille du menu pour la menu_result
-    menu_format = MenuFormatBuilder(max_dimension=thin).set_prompt("Choix_Sélectionner_>")  # Configuration du format pour la menu_result
+    y = result.split("\n")
+    liste_longueur = []
+    for phrase in y:
+        longueur = len(phrase)
+        liste_longueur.append(longueur)
+    max_r = max(liste_longueur)
+    max_r += 20
+    precedant = ["Page Précédente"]             # Variable pour menu_result
+    thin = Dimension(width=max_r, height=40)      # Ajustement de la taille du menu pour menu_result
+    # Configuration du format pour menu_result
+    menu_format = MenuFormatBuilder(max_dimension=thin).set_prompt("Choix_Sélectionner_>")  
     menu = SelectionMenu(precedant,
                          "Résultat de la demande :",
                          result, exit_option_text='Quitter la Boite à Outils',
@@ -297,7 +314,7 @@ def menu_result(result):
     menu.show()
     menu.join()
     select = menu.selected_option       # Récupère la valeur sélectionnée par le client
-    return select                       # Renvoi la valeur sélectionné par le client
+    return select                       # Renvoi la valeur sélectionnée par le client
 
 
 ###############################################################################
@@ -306,7 +323,7 @@ def menu_result(result):
 
 def demande():
     menu = client_move[0]           # Récupère le menu précédent pour le renvoyer dedans à la fin de l'affichage du résultat
-    result = Tube()                 # Lance la demande du client au serveur récupère le résultat dans la variable result
+    result = Tube()                 # Lance la demande du client au serveur. Récupère le résultat dans la variable result
     select = menu_result(result)    # Envoi le résultat dans menu_result pour l'afficher proprement
     if select == 0:                 # Si select = 0 retour à la page de sous-menu Précédente
         if menu == 0:
@@ -339,7 +356,7 @@ def demande():
 # Fonction tube :
 
 
-# Définit une fonction nommée "Tube" qui prend en entrée aucun argument
+# Définit une fonction nommée "Tube" qui ne prend en entrée aucun argument
 def Tube():
     # Encode la chaîne de caractères (formée par la concaténation des éléments "client_move[0]" et "client_move[1]" séparés par un ":") en utilisant l'encodage utf-8
     # et le stock dans la variable "line"
